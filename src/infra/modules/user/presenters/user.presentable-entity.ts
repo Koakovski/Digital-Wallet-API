@@ -19,12 +19,12 @@ export class UserPresentableEntity {
   email: string;
 
   @ApiProperty({
-    description: 'Date and time when the user was created',
+    description: 'Date when the user was created',
   })
   created_at: Date;
 
   @ApiProperty({
-    description: 'Date and time when the user was last updated',
+    description: 'Date when the user was last updated',
   })
   updated_at: Date;
 }
