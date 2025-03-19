@@ -15,6 +15,26 @@ export type UserEntityNewProps = {
 };
 
 export class UserEntity extends Entity<UserEntityProps> {
+  get name() {
+    return this.props.name;
+  }
+
+  get email() {
+    return this.props.email;
+  }
+
+  get password() {
+    return this.props.password;
+  }
+
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt;
+  }
+
   static new(props: UserEntityNewProps) {
     return UserEntity.create({
       name: props.name,
