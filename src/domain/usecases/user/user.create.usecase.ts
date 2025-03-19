@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/domain/entities/user.entity';
 import { UserRepository } from 'src/domain/repositories/user.repository';
 
 @Injectable()
 export class UserCreateUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    @Inject(UserRepository)
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async execute(params: UserCreateUseCaseParams): Promise<UserEntity> {
     const user = UserEntity.new({
