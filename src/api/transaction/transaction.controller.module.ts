@@ -6,4 +6,4 @@ import { TransactionUseCaseModule } from 'src/infra/usecases/transaction.usecase
   imports: [TransactionUseCaseModule],
   controllers: [TransactionController],
 })
-export class TransactionModule {}
+export class TransactionControllerModule {}
