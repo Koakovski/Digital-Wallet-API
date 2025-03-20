@@ -12,6 +12,6 @@ import { JwtEncryptService } from './jwt.encrypt.service';
       useClass: JwtEncryptService,
     },
   ],
-  exports: [EncryptService],
+  exports: [EncryptService, JwtModule],
 })
 export class EncryptModule {}

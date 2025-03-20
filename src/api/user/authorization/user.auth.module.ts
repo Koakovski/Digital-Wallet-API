@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserAuthGuard } from './user-auth.guard';
-import { UserUseCaseModule } from 'src/infra/usecases/user/user.usecase.module';
+import { PassportModule } from '@nestjs/passport';
+import { UserAuthEstrategy } from './user.auth.strategy';
+import { DatabaseModule } from 'src/infra/database/database.module';
 
 @Module({
-  imports: [UserUseCaseModule],
-  providers: [UserAuthGuard],
-  exports: [UserAuthGuard],
+  imports: [DatabaseModule, PassportModule],
+  providers: [UserAuthEstrategy],
+  exports: [UserAuthEstrategy],
 })
-export class UserAuthGuardModule {}
+export class UserAuthModule {}
