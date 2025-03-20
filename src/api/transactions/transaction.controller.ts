@@ -11,14 +11,14 @@ import { AuthUser } from '../user/authorization/auth-user.decorator';
 import { AuthenticatedUserPayload } from 'src/domain/usecases/user/user.login.usecase';
 import { TransactionEntity } from 'src/domain/entities/transaction.entity';
 import { TransactionPresenter } from './presenters/transaction.presenter';
-import { TransactionCreateUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
+import { TransactionCreateByTransferUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
 import { TransactionCreateByTransferDto } from './dtos/transaction.create-by-transfer.dto';
 
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
   constructor(
-    private readonly transactionCreateUseCase: TransactionCreateUseCase,
+    private readonly transactionCreateByTransferUseCase: TransactionCreateByTransferUseCase,
   ) {}
 
   @Post('/transfer')
@@ -34,7 +34,7 @@ export class TransactionController {
     @AuthUser() authUser: AuthenticatedUserPayload,
     @Body() body: TransactionCreateByTransferDto,
   ) {
-    const transaction = await this.transactionCreateUseCase.execute({
+    const transaction = await this.transactionCreateByTransferUseCase.execute({
       receiverId: authUser.id,
       senderId: body.receiver_id,
       valueInCents: body.value_in_cents,

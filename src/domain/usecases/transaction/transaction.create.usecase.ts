@@ -6,8 +6,9 @@ import { TransactionAggregateRepository } from 'src/domain/repositories/transact
 import { UserRepository } from 'src/domain/repositories/user.repository';
 
 @Injectable()
-export class TransactionCreateUseCase
-  implements UseCase<TransactionCreateUseCaseParams, TransactionAggregate>
+export class TransactionCreateByTransferUseCase
+  implements
+    UseCase<TransactionCreateByTransferUseCaseParams, TransactionAggregate>
 {
   constructor(
     @Inject(UserRepository)
@@ -17,7 +18,7 @@ export class TransactionCreateUseCase
   ) {}
 
   async execute(
-    params: TransactionCreateUseCaseParams,
+    params: TransactionCreateByTransferUseCaseParams,
   ): Promise<TransactionAggregate> {
     const [sender, receiver] = await Promise.all([
       this.fetchUser(params.senderId),
@@ -43,7 +44,7 @@ export class TransactionCreateUseCase
   }
 }
 
-export type TransactionCreateUseCaseParams = {
+export type TransactionCreateByTransferUseCaseParams = {
   senderId: string;
   receiverId: string;
   valueInCents: number;
