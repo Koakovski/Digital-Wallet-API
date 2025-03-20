@@ -1,14 +1,33 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UserCreateUseCase } from 'src/domain/usecases/user/user.create.usecase';
 import { UserCreateDto } from './dtos/user.create.dto';
 import { UserPresentableEntity } from './presenters/user.presentable-entity';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserPresenter } from './presenters/user.presenter';
+import {
+  AuthenticatedUserPayload,
+  UserLoginUseCase,
+} from 'src/domain/usecases/user/user.login.usecase';
+import { UserLoginDto } from './dtos/user.login.dto';
+import { UserLoginResponse } from './presenters/user.login-response';
+import { AuthGuard } from 'src/infra/authorization/auth.guard';
+import { UserFindByEmailUseCase } from 'src/domain/usecases/user/user.find-by-email.usecase';
+import { AuthUser } from 'src/infra/authorization/user/auth-user.decorator';
 
 @ApiTags('user')
-@Controller('/user')
+@Controller('/users')
 export class UserController {
-  constructor(private readonly userCreateUseCase: UserCreateUseCase) {}
+  constructor(
+    private readonly userCreateUseCase: UserCreateUseCase,
+    private readonly userLoginUseCase: UserLoginUseCase,
+    private readonly userFindByEmailUseCase: UserFindByEmailUseCase,
+  ) {}
 
   @Post('/')
   @ApiOperation({ description: 'create a new User' })
@@ -20,6 +39,38 @@ export class UserController {
       name: body.name,
       email: body.email,
       password: body.password,
+    });
+
+    return new UserPresenter(user).toPresent();
+  }
+
+  @Post('/login')
+  @ApiOperation({ description: 'Login to the system' })
+  @ApiOkResponse({
+    type: UserLoginResponse,
+  })
+  async login(@Body() body: UserLoginDto): Promise<UserLoginResponse> {
+    const { user, token } = await this.userLoginUseCase.execute({
+      email: body.email,
+      password: body.password,
+    });
+
+    const userPresentable = new UserPresenter(user).toPresent();
+    return { token, user: userPresentable };
+  }
+
+  @Get('/me')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ description: 'Get authenticated user data' })
+  @ApiOkResponse({
+    type: UserPresentableEntity,
+  })
+  @ApiBearerAuth()
+  async me(
+    @AuthUser() authUser: AuthenticatedUserPayload,
+  ): Promise<UserPresentableEntity> {
+    const user = await this.userFindByEmailUseCase.execute({
+      email: authUser.email,
     });
 
     return new UserPresenter(user).toPresent();

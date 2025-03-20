@@ -9,6 +9,7 @@ export class SwaggerRegistrar {
         'API for managing balances and financial transfers between users.',
       )
       .setVersion('1.0')
+      .addBearerAuth()
       .build();
 
     const documentFactory = () => SwaggerModule.createDocument(app, config);
