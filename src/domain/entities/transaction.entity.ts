@@ -26,6 +26,10 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
     return this.props.valueInCents;
   }
 
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
   static new(props: TransactionEntityNewProps) {
     return TransactionEntity.create({
       senderId: props.senderId,
