@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { UserPresenter } from './presenters/user.presenter';
 import {
-  AuthorizedUserPayload,
+  AuthenticatedUserPayload,
   UserLoginUseCase,
 } from 'src/domain/usecases/user/user.login.usecase';
 import { UserLoginDto } from './dtos/user.login.dto';
@@ -67,7 +67,7 @@ export class UserController {
   })
   @ApiBearerAuth()
   async me(
-    @AuthUser() authUser: AuthorizedUserPayload,
+    @AuthUser() authUser: AuthenticatedUserPayload,
   ): Promise<UserPresentableEntity> {
     const user = await this.userFindByEmailUseCase.execute({
       email: authUser.email,
