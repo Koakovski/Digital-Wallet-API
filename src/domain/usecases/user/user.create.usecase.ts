@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { UseCase } from 'src/domain/base/usecase';
 import { UserEntity } from 'src/domain/entities/user.entity';
 import { UserEmailAlreadyExistsException } from 'src/domain/exceptions/user/user.email-already-exitst.exception';
 import { UserRepository } from 'src/domain/repositories/user.repository';
 import { HashService } from 'src/domain/services/hash.service';
 
 @Injectable()
-export class UserCreateUseCase {
+export class UserCreateUseCase
+  implements UseCase<UserCreateUseCaseParams, UserEntity>
+{
   constructor(
     @Inject(UserRepository)
     private readonly userRepository: UserRepository,
