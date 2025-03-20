@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -11,10 +11,38 @@ import { AuthUser } from '../user/authorization/auth-user.decorator';
 import { AuthenticatedUserPayload } from 'src/domain/usecases/user/user.login.usecase';
 import { TransactionEntity } from 'src/domain/entities/transaction.entity';
 import { TransactionPresenter } from './presenters/transaction.presenter';
+import { TransactionCreateUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
+import { TransactionCreateByTransferDto } from './dtos/transaction.create-by-transfer.dto';
 
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
+  constructor(
+    private readonly transactionCreateUseCase: TransactionCreateUseCase,
+  ) {}
+
+  @Post('/transfer')
+  @UseGuards(UserAuthGuard)
+  @ApiOperation({
+    description: 'Authenticated User transfer value to another user',
+  })
+  @ApiOkResponse({
+    type: TransactionPresentableEntity,
+  })
+  @ApiBearerAuth()
+  async transfer(
+    @AuthUser() authUser: AuthenticatedUserPayload,
+    @Body() body: TransactionCreateByTransferDto,
+  ) {
+    const transaction = await this.transactionCreateUseCase.execute({
+      receiverId: authUser.id,
+      senderId: body.receiver_id,
+      valueInCents: body.value_in_cents,
+    });
+
+    return new TransactionPresenter(transaction.root).toPresent();
+  }
+
   @Get('/')
   @UseGuards(UserAuthGuard)
   @ApiOperation({ description: 'Get all transactions of authorized User' })
