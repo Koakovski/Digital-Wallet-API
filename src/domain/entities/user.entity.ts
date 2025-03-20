@@ -44,7 +44,7 @@ export class UserEntity extends Entity<UserEntityProps> {
   removeBalance(value: number) {
     if (this.props.balance - value < 0) {
       throw new InsufficientBalanceException(
-        `User with id ${this.id} do not have enough balance balance to complete the transaction`,
+        `User with id ${this.id} do not have enough balance to complete the transaction`,
       );
     }
 
