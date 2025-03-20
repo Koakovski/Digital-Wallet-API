@@ -18,5 +18,23 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
+  SentTransactions     Transaction[] @relation("sent_transactions")
+  ReceivedTransactions Transaction[] @relation("received_transactions")
+
   @@map("users")
+}
+
+model Transaction {
+  id String @id @default(uuid()) @db.Uuid
+
+  senderId     String @map("sender_id") @db.Uuid
+  receiverId   String @map("receiver_id") @db.Uuid
+  valueInCents Int    @map("value_in_cents")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  sender   User @relation("sent_transactions", fields: [senderId], references: [id])
+  receiver User @relation("received_transactions", fields: [receiverId], references: [id])
+
+  @@map("transactions")
 }
