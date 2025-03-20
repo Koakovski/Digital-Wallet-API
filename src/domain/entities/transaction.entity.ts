@@ -13,6 +13,11 @@ export type TransactionEntityNewProps = {
   valueInCents: number;
 };
 
+export enum TransactionUserRole {
+  SENDER = 'SENDER',
+  RECEIVER = 'RECEIVER',
+}
+
 export class TransactionEntity extends Entity<TransactionEntityProps> {
   get senderId() {
     return this.props.senderId;

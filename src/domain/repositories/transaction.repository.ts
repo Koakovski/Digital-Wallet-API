@@ -1,4 +1,7 @@
-import { TransactionEntity } from '../entities/transaction.entity';
+import {
+  TransactionEntity,
+  TransactionUserRole,
+} from '../entities/transaction.entity';
 
 export interface TransactionRepository {
   findAllOfUser(
@@ -10,5 +13,5 @@ export const TransactionRepository = Symbol('TransactionRepository');
 
 export type TransactionFindAllOfUserParams = {
   userId: string;
-  as?: 'receiver' | 'sender';
+  as?: TransactionUserRole;
 };

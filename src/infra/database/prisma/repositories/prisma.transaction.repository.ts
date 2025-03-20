@@ -4,7 +4,10 @@ import {
   TransactionRepository,
 } from 'src/domain/repositories/transaction.repository';
 import { PrismaService } from '../prisma.service';
-import { TransactionEntity } from 'src/domain/entities/transaction.entity';
+import {
+  TransactionEntity,
+  TransactionUserRole,
+} from 'src/domain/entities/transaction.entity';
 import { Prisma } from '@prisma/client';
 import { PrismaTransactionMapper } from '../mappers/prisma.transaction.mapper';
 
@@ -18,12 +21,12 @@ export class PrismaTransactionRepository implements TransactionRepository {
     const where: Prisma.TransactionWhereInput[] = [];
 
     switch (params.as) {
-      case 'receiver':
+      case TransactionUserRole.RECEIVER:
         where.push({
           receiverId: params.userId,
         });
         break;
-      case 'sender':
+      case TransactionUserRole.SENDER:
         where.push({
           senderId: params.userId,
         });
