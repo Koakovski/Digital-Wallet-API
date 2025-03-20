@@ -33,8 +33,8 @@ model Transaction {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  sender   User @relation("sent_transactions", fields: [senderId], references: [id])
-  receiver User @relation("received_transactions", fields: [receiverId], references: [id])
+  Sender   User @relation("sent_transactions", fields: [senderId], references: [id])
+  Receiver User @relation("received_transactions", fields: [receiverId], references: [id])
 
   @@map("transactions")
 }
