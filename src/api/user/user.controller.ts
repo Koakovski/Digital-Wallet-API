@@ -14,7 +14,7 @@ import { UserLoginDto } from './dtos/user.login.dto';
 import { UserLoginResponse } from './presenters/user.login-response';
 
 @ApiTags('user')
-@Controller('/user')
+@Controller('/users')
 export class UserController {
   constructor(
     private readonly userCreateUseCase: UserCreateUseCase,
