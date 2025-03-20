@@ -25,10 +25,12 @@ export class UserLoginUseCase
     const user = await this.fetchUser(params);
     await this.validatePassword(user, params);
 
-    const token = this.encryptService.encrypt({
+    const payload: AuthorizedUserPaylaod = {
       id: user.id,
       email: user.email,
-    });
+    };
+
+    const token = this.encryptService.encrypt(payload);
 
     return {
       token,
@@ -70,4 +72,9 @@ export type UserLoginUseCaseParams = {
 export type UserLoginUseCaseResult = {
   token: string;
   user: UserEntity;
+};
+
+export type AuthorizedUserPaylaod = {
+  id: string;
+  email: string;
 };
