@@ -4,6 +4,7 @@ export type UserEntityProps = {
   name: string;
   email: string;
   password: string;
+  balance: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -27,6 +28,10 @@ export class UserEntity extends Entity<UserEntityProps> {
     return this.props.password;
   }
 
+  get balance() {
+    return this.props.balance;
+  }
+
   get createdAt() {
     return this.props.createdAt;
   }
@@ -39,6 +44,7 @@ export class UserEntity extends Entity<UserEntityProps> {
     return UserEntity.create({
       name: props.name,
       email: props.email,
+      balance: 0,
       password: props.password,
       createdAt: new Date(),
       updatedAt: new Date(),
