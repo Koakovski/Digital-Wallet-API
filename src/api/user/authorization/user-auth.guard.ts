@@ -1,19 +1,11 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UnauthorizedException } from 'src/domain/exceptions/common/unauthorized.exception';
-import { AuthorizeUseCase } from '../../domain/usecases/authorize.usecase';
+import { UserAuthorizeUseCase } from 'src/domain/usecases/user/user.authorize.usecase';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(
-    @Inject(AuthorizeUseCase)
-    private readonly authorizerUseCase: AuthorizeUseCase,
-  ) {}
+export class UserAuthGuard implements CanActivate {
+  constructor(private readonly authorizeUseCase: UserAuthorizeUseCase) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -22,7 +14,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const payload = await this.authorizerUseCase.execute({ token });
+    const payload = await this.authorizeUseCase.execute({ token });
     request.user = payload;
 
     return true;

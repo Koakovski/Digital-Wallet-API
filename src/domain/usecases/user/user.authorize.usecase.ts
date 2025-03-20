@@ -1,12 +1,12 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthorizeUseCase, AuthorizeUseCaseParams } from '../authorize.usecase';
 import { AuthenticatedUserPayload } from './user.login.usecase';
 import { EncryptService } from 'src/domain/services/encrypt.service';
 import { UserRepository } from 'src/domain/repositories/user.repository';
+import { UseCase } from 'src/domain/base/usecase';
 
 @Injectable()
 export class UserAuthorizeUseCase
-  implements AuthorizeUseCase<AuthenticatedUserPayload>
+  implements UseCase<UserAuthorizeUseCaseParams, AuthenticatedUserPayload>
 {
   constructor(
     @Inject(UserRepository)
@@ -16,7 +16,7 @@ export class UserAuthorizeUseCase
   ) {}
 
   async execute(
-    params: AuthorizeUseCaseParams,
+    params: UserAuthorizeUseCaseParams,
   ): Promise<AuthenticatedUserPayload> {
     const payload = this.encryptService.decrypt<AuthenticatedUserPayload>(
       params.token,
@@ -34,3 +34,7 @@ export class UserAuthorizeUseCase
     }
   }
 }
+
+export type UserAuthorizeUseCaseParams = {
+  token: string;
+};

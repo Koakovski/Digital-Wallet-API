@@ -16,9 +16,9 @@ import {
 } from 'src/domain/usecases/user/user.login.usecase';
 import { UserLoginDto } from './dtos/user.login.dto';
 import { UserLoginResponse } from './presenters/user.login-response';
-import { AuthGuard } from 'src/infra/authorization/auth.guard';
 import { UserFindByEmailUseCase } from 'src/domain/usecases/user/user.find-by-email.usecase';
-import { AuthUser } from 'src/infra/authorization/user/auth-user.decorator';
+import { AuthUser } from 'src/api/user/authorization/auth-user.decorator';
+import { UserAuthGuard } from './authorization/user-auth.guard';
 
 @ApiTags('user')
 @Controller('/users')
@@ -60,7 +60,7 @@ export class UserController {
   }
 
   @Get('/me')
-  @UseGuards(AuthGuard)
+  @UseGuards(UserAuthGuard)
   @ApiOperation({ description: 'Get authenticated user data' })
   @ApiOkResponse({
     type: UserPresentableEntity,
