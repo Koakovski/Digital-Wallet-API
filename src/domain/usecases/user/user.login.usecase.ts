@@ -25,7 +25,7 @@ export class UserLoginUseCase
     const user = await this.fetchUser(params);
     await this.validatePassword(user, params);
 
-    const payload: AuthorizedUserPaylaod = {
+    const payload: AuthorizedUserPayload = {
       id: user.id,
       email: user.email,
     };
@@ -74,7 +74,7 @@ export type UserLoginUseCaseResult = {
   user: UserEntity;
 };
 
-export type AuthorizedUserPaylaod = {
+export type AuthorizedUserPayload = {
   id: string;
   email: string;
 };
