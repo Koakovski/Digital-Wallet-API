@@ -35,8 +35,8 @@ export class TransactionController {
     @Body() body: TransactionCreateByTransferDto,
   ) {
     const transaction = await this.transactionCreateByTransferUseCase.execute({
-      receiverId: authUser.id,
-      senderId: body.receiver_id,
+      receiverId: body.receiver_id,
+      senderId: authUser.id,
       valueInCents: body.value_in_cents,
     });
 
