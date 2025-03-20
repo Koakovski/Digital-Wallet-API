@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UnauthorizedException } from 'src/domain/exceptions/common/unauthorized.exception';
-import { AuthGuardAuthorizer } from './auth.guard-authorizer';
+import { AuthorizerService } from '../../domain/services/authorizer.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    @Inject(AuthGuardAuthorizer)
-    private readonly authorizer: AuthGuardAuthorizer,
+    @Inject(AuthorizerService)
+    private readonly authorizerService: AuthorizerService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const payload = await this.authorizer.authorize(token);
+    const payload = await this.authorizerService.authorize(token);
     request.user = payload;
 
     return true;
