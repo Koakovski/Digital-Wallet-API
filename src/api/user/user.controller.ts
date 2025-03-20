@@ -1,17 +1,24 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UserCreateUseCase } from 'src/domain/usecases/user/user.create.usecase';
 import { UserCreateDto } from './dtos/user.create.dto';
 import { UserPresentableEntity } from './presenters/user.presentable-entity';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserPresenter } from './presenters/user.presenter';
-import { UserLoginUseCase } from 'src/domain/usecases/user/user.login.usecase';
+import {
+  AuthorizedUserPayload,
+  UserLoginUseCase,
+} from 'src/domain/usecases/user/user.login.usecase';
 import { UserLoginDto } from './dtos/user.login.dto';
 import { UserLoginResponse } from './presenters/user.login-response';
+import { AuthGuard } from 'src/infra/authorization/auth.guard';
+import { UserFindByEmailUseCase } from 'src/domain/usecases/user/user.find-by-email.usecase';
+import { AuthUser } from 'src/infra/authorization/user/auth-user.decorator';
 
 @ApiTags('user')
 @Controller('/users')
@@ -19,6 +26,7 @@ export class UserController {
   constructor(
     private readonly userCreateUseCase: UserCreateUseCase,
     private readonly userLoginUseCase: UserLoginUseCase,
+    private readonly userFindByEmailUseCase: UserFindByEmailUseCase,
   ) {}
 
   @Post('/')
@@ -49,5 +57,22 @@ export class UserController {
 
     const userPresentable = new UserPresenter(user).toPresent();
     return { token, user: userPresentable };
+  }
+
+  @Get('/me')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ description: 'Get authenticated user data' })
+  @ApiOkResponse({
+    type: UserPresentableEntity,
+  })
+  @ApiBearerAuth()
+  async me(
+    @AuthUser() authUser: AuthorizedUserPayload,
+  ): Promise<UserPresentableEntity> {
+    const user = await this.userFindByEmailUseCase.execute({
+      email: authUser.email,
+    });
+
+    return new UserPresenter(user).toPresent();
   }
 }
