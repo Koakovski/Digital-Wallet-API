@@ -1,4 +1,5 @@
 import { Entity } from '../base/entity';
+import { InsufficientBalanceException } from '../exceptions/user/user.insufficient-balance.exception';
 
 export type UserEntityProps = {
   name: string;
@@ -38,6 +39,20 @@ export class UserEntity extends Entity<UserEntityProps> {
 
   get updatedAt() {
     return this.props.updatedAt;
+  }
+
+  removeBalance(value: number) {
+    if (this.props.balance - value < 0) {
+      throw new InsufficientBalanceException(
+        `User with id ${this.id} do not have enough balance balance to complete the transaction`,
+      );
+    }
+
+    this.props.balance -= value;
+  }
+
+  addBalance(value: number) {
+    this.props.balance += value;
   }
 
   static new(props: UserEntityNewProps) {

@@ -29,9 +29,8 @@ export class TransactionAggregate {
   }
 
   static newByTransfer(props: TransactionAggregateNewByTransferProps) {
-    if (props.sender.balance < props.valueInCents) {
-      throw new Error();
-    }
+    props.sender.removeBalance(props.valueInCents);
+    props.receiver.addBalance(props.valueInCents);
 
     const transaction = TransactionEntity.new({
       receiverId: props.receiver.id,
