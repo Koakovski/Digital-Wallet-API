@@ -60,7 +60,7 @@ export class TransactionController {
 
   @Get('/')
   @UseGuards(UserAuthGuard)
-  @ApiOperation({ description: 'Get all transactions of authorized User' })
+  @ApiOperation({ description: 'Get all transactions of authenticated User' })
   @ApiOkResponse({
     type: PaginatedTransactionAggregatePresentableEntity,
     isArray: true,
