@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -17,12 +26,14 @@ import { PaginationRequest } from 'src/domain/base/paginated';
 import { PaginatedTransactionAggregatePresentableEntity } from './presenters/aggregate/transaction.aggregate.paginated.presentable-entity';
 import { TransactionAggregatePresenter } from './presenters/aggregate/transaction.aggregate.presenter';
 import { TransactionAggregatePresentableEntity } from './presenters/aggregate/transaction.aggregate.presentable-entity';
+import { TransactionCreateByCancelUseCase } from 'src/domain/usecases/transaction/transaction.create-by-cancell.usecase';
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
   constructor(
     private readonly transactionCreateByTransferUseCase: TransactionCreateByTransferUseCase,
     private readonly transactionFindPaginatedOfUserUseCase: TransactionFindPaginatedOfUserUseCase,
+    private readonly transactionCreateByCancelUseCase: TransactionCreateByCancelUseCase,
   ) {}
 
   @Post('/transfer')
@@ -74,5 +85,20 @@ export class TransactionController {
       (transaction) =>
         new TransactionAggregatePresenter(transaction).toPresent(),
     );
+  }
+
+  @Patch('/cancel/:transactionId')
+  @UseGuards(UserAuthGuard)
+  @ApiOperation({ description: 'Cancel a transaction by its ID' })
+  @ApiOkResponse({
+    type: TransactionAggregatePresentableEntity,
+  })
+  @ApiBearerAuth()
+  async cancelTransaction(@Param('transactionId') transactionId: string) {
+    const transaction = await this.transactionCreateByCancelUseCase.execute({
+      transactionId,
+    });
+
+    return new TransactionAggregatePresenter(transaction).toPresent();
   }
 }
