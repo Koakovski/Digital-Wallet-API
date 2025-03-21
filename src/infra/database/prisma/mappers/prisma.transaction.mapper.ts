@@ -1,19 +1,18 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { Transaction } from '@prisma/client';
 import { TransactionEntity } from 'src/domain/entities/transaction.entity';
-import { TransactionCancellationTransactionDataValueObject } from 'src/domain/value-objects/transaction/transaction.cancelletion-transaction-data.value-object';
+import { TransactionCancellationDataValueObject } from 'src/domain/value-objects/transaction/transaction.cancelletion-data.value-object';
 
 export class PrismaTransactionMapper {
   static toDomain(data: Transaction): TransactionEntity {
-    const cancelleationTransactionData =
-      this.recoverCancelleationTransactionData(data);
+    const cancelleationData = this.recoverCancellationData(data);
 
     return TransactionEntity.recover(
       {
         senderId: data.senderId,
         receiverId: data.receiverId,
         valueInCents: data.valueInCents,
-        cancelleationTransactionData,
+        cancelleationData,
         createdAt: data.createdAt,
       },
       data.id,
@@ -22,8 +21,8 @@ export class PrismaTransactionMapper {
 
   static toPersistence(data: TransactionEntity): Transaction {
     const cancellationTransactionId =
-      data.cancelleationTransactionData?.cancellationTransactionId ?? null;
-    const cancelledAt = data.cancelleationTransactionData?.cancelledAt ?? null;
+      data.cancelleationData?.cancellationTransactionId ?? null;
+    const cancelledAt = data.cancelleationData?.cancelledAt ?? null;
 
     return {
       id: data.id,
@@ -36,11 +35,11 @@ export class PrismaTransactionMapper {
     };
   }
 
-  private static recoverCancelleationTransactionData(data: Transaction) {
+  private static recoverCancellationData(data: Transaction) {
     if (!data.cancellationTransactionId && !data.cancelledAt) return null;
 
     if (data.cancellationTransactionId && data.cancelledAt) {
-      return TransactionCancellationTransactionDataValueObject.recover({
+      return TransactionCancellationDataValueObject.recover({
         cancellationTransactionId: data.cancellationTransactionId,
         cancelledAt: data.cancelledAt,
       });
