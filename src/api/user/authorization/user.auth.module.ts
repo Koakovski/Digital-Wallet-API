@@ -3,7 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { UserAuthEstrategy } from './user.auth.strategy';
 
 @Module({
-  imports: [ PassportModule],
+  imports: [PassportModule],
   providers: [UserAuthEstrategy],
   exports: [UserAuthEstrategy],
 })
