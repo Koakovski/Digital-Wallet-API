@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 import { TransactionCreateByTransferUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
+import { TransactionFindPaginatedOfUserUseCase } from 'src/domain/usecases/transaction/transaction.find-paginated-of-user.usecase';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [TransactionCreateByTransferUseCase],
-  exports: [TransactionCreateByTransferUseCase],
+  providers: [
+    TransactionCreateByTransferUseCase,
+    TransactionFindPaginatedOfUserUseCase,
+  ],
+  exports: [
+    TransactionCreateByTransferUseCase,
+    TransactionFindPaginatedOfUserUseCase,
+  ],
 })
 export class TransactionUseCaseModule {}
