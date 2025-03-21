@@ -8,6 +8,7 @@ import { UserAuthModule } from './api/user/authorization/user.auth.module';
 import { PermissionModule } from './infra/permissions/permission.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from './infra/services/config/config.module';
+import { GlobalExceptionFilterModule } from './infra/exception-filters/global-exception-filter.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from './infra/services/config/config.module';
     PermissionModule,
     UserControllerModule,
     TransactionControllerModule,
+    GlobalExceptionFilterModule,
   ],
   controllers: [AppController],
 })
