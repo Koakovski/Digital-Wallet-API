@@ -21,7 +21,7 @@ export class PrismaTransactionMapper {
 
   static toPersistence(data: TransactionEntity): Transaction {
     const cancellationTransactionId =
-      data.cancelleationData?.cancellationTransactionId ?? null;
+      data.cancelleationData?.transactionId ?? null;
     const cancelledAt = data.cancelleationData?.cancelledAt ?? null;
 
     return {
@@ -40,7 +40,7 @@ export class PrismaTransactionMapper {
 
     if (data.cancellationTransactionId && data.cancelledAt) {
       return TransactionCancellationDataValueObject.recover({
-        cancellationTransactionId: data.cancellationTransactionId,
+        transactionId: data.cancellationTransactionId,
         cancelledAt: data.cancelledAt,
       });
     }

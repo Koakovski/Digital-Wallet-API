@@ -1,5 +1,5 @@
 export type TransactionCancellationDataValueObjectProps = {
-  cancellationTransactionId: string;
+  transactionId: string;
   cancelledAt: Date;
 };
 
@@ -8,8 +8,8 @@ export class TransactionCancellationDataValueObject {
     private readonly props: TransactionCancellationDataValueObjectProps,
   ) {}
 
-  get cancellationTransactionId() {
-    return this.props.cancellationTransactionId;
+  get transactionId() {
+    return this.props.transactionId;
   }
 
   get cancelledAt() {
