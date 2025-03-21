@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PrismaUserRepository } from './prisma/repositories/prisma.user.repository';
 import { UserRepository } from 'src/domain/repositories/user.repository';
 import { PrismaService } from './prisma/prisma.service';
 import { TransactionAggregateRepository } from 'src/domain/repositories/transaction.aggregate.repository';
 import { PrismaTransactionAggregateRepository } from './prisma/repositories/prisma.transaction.aggregate.repository';
 
+@Global()
 @Module({
   providers: [
     PrismaService,
