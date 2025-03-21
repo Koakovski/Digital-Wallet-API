@@ -3,7 +3,9 @@ import { Paginated, PaginationRequest } from '../base/paginated';
 import { TransactionUserRole } from '../entities/transaction.entity';
 
 export interface TransactionAggregateRepository {
+  findById(id: string): Promise<TransactionAggregate | null>;
   create(aggregate: TransactionAggregate): Promise<TransactionAggregate>;
+  update(aggregate: TransactionAggregate): Promise<TransactionAggregate>;
   findPaginatedOfUser(
     params: TransactionAggregateFindPaginatedOfUserParams,
   ): Promise<Paginated<TransactionAggregate>>;

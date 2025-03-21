@@ -18,6 +18,23 @@ export class PrismaTransactionAggregateRepository
 {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findById(id: string): Promise<TransactionAggregate | null> {
+    const prismaTransaction = await this.prismaService.transaction.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        Sender: true,
+        Receiver: true,
+        CancellationTransaction: true,
+      },
+    });
+
+    if (!prismaTransaction) return null;
+
+    return PrismaTransactionAggregateMapper.toDomain(prismaTransaction);
+  }
+
   async create(aggregate: TransactionAggregate): Promise<TransactionAggregate> {
     const prismaTransaction = await this.prismaService.$transaction(
       async (tx) => {
@@ -40,6 +57,49 @@ export class PrismaTransactionAggregateRepository
           include: {
             Sender: true,
             Receiver: true,
+            CancellationTransaction: true,
+          },
+        });
+      },
+    );
+
+    return PrismaTransactionAggregateMapper.toDomain(prismaTransaction);
+  }
+
+  async update(aggregate: TransactionAggregate): Promise<TransactionAggregate> {
+    const prismaTransaction = await this.prismaService.$transaction(
+      async (tx) => {
+        await tx.user.update({
+          where: {
+            id: aggregate.sender.id,
+          },
+          data: PrismaUserMapper.toPersistence(aggregate.sender),
+        });
+
+        await tx.user.update({
+          where: {
+            id: aggregate.receiver.id,
+          },
+          data: PrismaUserMapper.toPersistence(aggregate.receiver),
+        });
+
+        if (aggregate.cancellTransaction) {
+          await tx.transaction.create({
+            data: PrismaTransactionMapper.toPersistence(
+              aggregate.cancellTransaction,
+            ),
+          });
+        }
+
+        return await tx.transaction.update({
+          where: {
+            id: aggregate.root.id,
+          },
+          data: PrismaTransactionMapper.toPersistence(aggregate.root),
+          include: {
+            Sender: true,
+            Receiver: true,
+            CancellationTransaction: true,
           },
         });
       },
@@ -72,6 +132,7 @@ export class PrismaTransactionAggregateRepository
         include: {
           Receiver: true,
           Sender: true,
+          CancellationTransaction: true,
         },
         skip: paginationRequest.skip,
         take: paginationRequest.perPage,
