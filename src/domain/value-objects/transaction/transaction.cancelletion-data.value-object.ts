@@ -3,6 +3,10 @@ export type TransactionCancellationDataValueObjectProps = {
   cancelledAt: Date;
 };
 
+export type TransactionCancellationDataValueObjectNewProps = {
+  transactionId: string;
+};
+
 export class TransactionCancellationDataValueObject {
   private constructor(
     private readonly props: TransactionCancellationDataValueObjectProps,
@@ -14,6 +18,13 @@ export class TransactionCancellationDataValueObject {
 
   get cancelledAt() {
     return this.props.cancelledAt;
+  }
+
+  static new(props: TransactionCancellationDataValueObjectNewProps) {
+    return new TransactionCancellationDataValueObject({
+      transactionId: props.transactionId,
+      cancelledAt: new Date(),
+    });
   }
 
   static recover(props: TransactionCancellationDataValueObjectProps) {
