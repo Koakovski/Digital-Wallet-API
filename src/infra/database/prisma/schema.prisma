@@ -10,10 +10,10 @@ datasource db {
 model User {
   id String @id @default(uuid()) @db.Uuid
 
-  name     String
-  email    String @unique
-  password String
-  balance  Int    @default(0)
+  name           String
+  email          String @unique
+  password       String
+  balanceInCents Int    @default(0) @map("balance_in_cents")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")

@@ -5,7 +5,7 @@ export type UserEntityProps = {
   name: string;
   email: string;
   password: string;
-  balance: number;
+  balanceInCents: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -29,8 +29,8 @@ export class UserEntity extends Entity<UserEntityProps> {
     return this.props.password;
   }
 
-  get balance() {
-    return this.props.balance;
+  get balanceInCents() {
+    return this.props.balanceInCents;
   }
 
   get createdAt() {
@@ -42,24 +42,24 @@ export class UserEntity extends Entity<UserEntityProps> {
   }
 
   removeBalance(value: number) {
-    if (this.props.balance - value < 0) {
+    if (this.props.balanceInCents - value < 0) {
       throw new InsufficientBalanceException(
         `User with id ${this.id} do not have enough balance to complete the transaction`,
       );
     }
 
-    this.props.balance -= value;
+    this.props.balanceInCents -= value;
   }
 
   addBalance(value: number) {
-    this.props.balance += value;
+    this.props.balanceInCents += value;
   }
 
   static new(props: UserEntityNewProps) {
     return UserEntity.create({
       name: props.name,
       email: props.email,
-      balance: 0,
+      balanceInCents: 0,
       password: props.password,
       createdAt: new Date(),
       updatedAt: new Date(),

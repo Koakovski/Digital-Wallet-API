@@ -8,7 +8,7 @@ export class PrismaUserMapper {
         name: data.name,
         email: data.email,
         password: data.password,
-        balance: data.balance,
+        balanceInCents: data.balanceInCents,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
       },
@@ -22,7 +22,7 @@ export class PrismaUserMapper {
       name: data.name,
       email: data.email,
       password: data.password,
-      balance: data.balance,
+      balanceInCents: data.balanceInCents,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     };

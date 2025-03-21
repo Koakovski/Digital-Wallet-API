@@ -9,7 +9,7 @@ export class UserPresenter {
       id: this.user.id,
       name: this.user.name,
       email: this.user.email,
-      balance: this.user.balance,
+      balance_in_cents: this.user.balanceInCents,
       created_at: this.user.createdAt,
       updated_at: this.user.updatedAt,
     };

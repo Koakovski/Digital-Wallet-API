@@ -19,10 +19,10 @@ export class UserPresentableEntity {
   email: string;
 
   @ApiProperty({
-    description: 'The current balance of user',
+    description: 'The current balance in cents of user',
     example: 0,
   })
-  balance: number;
+  balance_in_cents: number;
 
   @ApiProperty({
     description: 'Date when the user was created',

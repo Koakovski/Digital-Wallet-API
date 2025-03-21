@@ -10,7 +10,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main",
     "dev": "nest start --watch",
-    "migrate:create": "yarn prisma migrate dev"
+    "migrate:apply": "yarn prisma migrate deploy",
+    "migrate:create": "yarn prisma migrate dev",
+    "migrate:generate": "yarn prisma migrate dev --create-only"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
