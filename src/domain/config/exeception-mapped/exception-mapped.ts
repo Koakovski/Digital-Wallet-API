@@ -8,7 +8,7 @@ export interface ValidationErrorDetail extends ErrorDetail {
 }
 
 export interface MappedError extends ErrorDetail {
-  validationErrors?: ValidationErrorDetail[];
+  validation_errors?: ValidationErrorDetail[];
 }
 
 export interface MappedErrorResponse {
