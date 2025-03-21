@@ -17,3 +17,9 @@ A **Digital Wallet API** é uma solução para gerenciamento de saldo e transfer
 - O usuário deve estar cadastrado para realizar transferências.
 - O saldo do usuário deve ser suficiente para efetuar uma transação.
 - A transferência deve ser executada dentro de uma transação segura e reversível.
+
+## Melhorias
+
+- [ ] **Adicionar mais testes unitários**
+- [ ] **Adicionar testes de integração**
+- [ ] **Simular ambiente no Docker**
