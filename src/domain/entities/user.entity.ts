@@ -56,10 +56,13 @@ export class UserEntity extends Entity<UserEntityProps> {
   }
 
   static new(props: UserEntityNewProps) {
+    const initialBalance = 100;
+    const balanceInCents = initialBalance * 100;
+
     return UserEntity.create({
       name: props.name,
       email: props.email,
-      balanceInCents: 0,
+      balanceInCents,
       password: props.password,
       createdAt: new Date(),
       updatedAt: new Date(),
