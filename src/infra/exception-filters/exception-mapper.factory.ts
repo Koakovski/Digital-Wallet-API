@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { ExceptionMapper } from 'src/infra/exception-filters/mappers/exception-mapper';
 import { BaseExceptionMapper } from './mappers/base.exception-mapper';
 import { NestHttpExceptionMapper } from './mappers/nest-http.exception-mapper';
@@ -6,9 +6,15 @@ import { UnknownExceptionMapper } from './mappers/unknown.exception.mapper';
 import { BaseException } from 'src/domain/exceptions/exception.base';
 import { ValidationError } from 'class-validator';
 import { ValidationErrorExceptionMapper } from './mappers/validation-error.exception-mapper';
+import { CaptureService } from 'src/domain/services/capture.service';
 
 @Injectable()
 export class ExceptionMapperFactory {
+  constructor(
+    @Inject(CaptureService)
+    private readonly captureService: CaptureService,
+  ) {}
+
   create(exception: unknown): ExceptionMapper {
     if (
       Array.isArray(exception) &&
@@ -26,6 +32,6 @@ export class ExceptionMapperFactory {
       return new NestHttpExceptionMapper(exception);
     }
 
-    return new UnknownExceptionMapper(exception);
+    return new UnknownExceptionMapper(exception, this.captureService);
   }
 }

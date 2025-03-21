@@ -1,11 +1,15 @@
 import { MappedErrorResponse } from 'src/domain/config/exeception-mapped/exception-mapped';
+import { CaptureService } from 'src/domain/services/capture.service';
 import { ExceptionMapper } from 'src/infra/exception-filters/mappers/exception-mapper';
 
 export class UnknownExceptionMapper implements ExceptionMapper {
-  constructor(private readonly exception: unknown) {}
+  constructor(
+    private readonly exception: unknown,
+    private readonly captureService: CaptureService,
+  ) {}
 
   map(): MappedErrorResponse {
-    console.log({ exception: this.exception });
+    this.captureService.capture(this.exception);
 
     return {
       status: 500,
