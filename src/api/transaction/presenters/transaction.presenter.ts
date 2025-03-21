@@ -1,5 +1,8 @@
 import { TransactionEntity } from 'src/domain/entities/transaction.entity';
-import { TransactionPresentableEntity } from './transaction.presentable-entity';
+import {
+  TransactionCancellationDataPresentableEntity,
+  TransactionPresentableEntity,
+} from './transaction.presentable-entity';
 
 export class TransactionPresenter {
   constructor(private readonly transaction: TransactionEntity) {}
@@ -10,7 +13,17 @@ export class TransactionPresenter {
       sender_id: this.transaction.senderId,
       receiver_id: this.transaction.receiverId,
       value_in_cents: this.transaction.valueInCents,
+      cancellation_data: this.presentableCancellationData,
       created_at: this.transaction.createdAt,
+    };
+  }
+
+  private get presentableCancellationData(): TransactionCancellationDataPresentableEntity | null {
+    if (!this.transaction.cancelleationData) return null;
+
+    return {
+      transaction_id: this.transaction.cancelleationData.transactionId,
+      cancelled_at: this.transaction.cancelleationData.cancelledAt,
     };
   }
 }
