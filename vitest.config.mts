@@ -6,7 +6,10 @@ export default defineConfig({
   test: {
     globals: true,
     include: ['test/**/*.spec.ts'],
-    setupFiles: ['./test/matchers/to-be-base-exception.matcher.ts'],
+    setupFiles: [
+      './test/matchers/to-be-base-exception.matcher.ts',
+      './test/matchers/to-throw-base-exception.matcher.ts',
+    ],
   },
   plugins: [
     tsconfigPaths(),

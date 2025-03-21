@@ -1,6 +1,7 @@
 import { expect } from 'vitest';
-import { RawMatcherFn } from '@vitest/expect';
+import { RawMatcherFn } from '@vitest/expect/dist';
 import { BaseException } from 'src/domain/exceptions/exception.base';
+import { ToBeBaseExceptionVerifier } from './to-be-base-exception.verifier';
 
 export const toBeBaseException: RawMatcherFn = function (
   actual: any,
@@ -10,37 +11,15 @@ export const toBeBaseException: RawMatcherFn = function (
   const printExpected = this.utils.printExpected;
   const printReceived = this.utils.printReceived;
 
-  if (actual instanceof expectedBaseException === false) {
-    return {
-      pass: false,
-      message: () =>
-        `Value should be an instance of ${
-          expectedBaseException.name
-        }, but received: ${printReceived(
-          (actual as BaseException).constructor.name,
-        )}`,
-    };
-  }
+  const verifier = new ToBeBaseExceptionVerifier(
+    printExpected,
+    printReceived,
+    actual,
+    expectedBaseException,
+    expectedMessage,
+  );
 
-  if (expectedMessage !== undefined && expectedMessage !== actual.message) {
-    return {
-      pass: false,
-      message: () =>
-        `Expected a ${
-          expectedBaseException.name
-        } with the message: ${printExpected(
-          expectedMessage,
-        )}, but received: ${printReceived(actual.message)}`,
-    };
-  }
-
-  return {
-    pass: true,
-    message: () =>
-      `Expected ${printReceived(actual)} not to be a ${
-        expectedBaseException.name
-      }`,
-  };
+  return verifier.verify();
 };
 
 expect.extend({

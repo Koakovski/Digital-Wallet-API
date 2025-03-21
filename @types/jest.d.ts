@@ -5,6 +5,10 @@ interface CustomMatchers<R = unknown> {
     exception: { new (...args: any[]): BaseException },
     message?: string,
   ): R;
+  toThrowBaseException(
+    expectedBaseException: { new (...args: any[]): BaseException },
+    expectedMessage?: string,
+  );
 }
 
 declare global {
