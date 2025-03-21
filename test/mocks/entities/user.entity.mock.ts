@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 import * as Factory from 'factory.ts';
 import { UserEntity } from 'src/domain/entities/user.entity';
 
