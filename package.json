@@ -12,7 +12,9 @@
     "dev": "nest start --watch",
     "migrate:apply": "yarn prisma migrate deploy",
     "migrate:create": "yarn prisma migrate dev",
-    "migrate:generate": "yarn prisma migrate dev --create-only"
+    "migrate:generate": "yarn prisma migrate dev --create-only",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -59,7 +61,9 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "unplugin-swc": "^1.5.1",
+    "vitest": "^3.0.9"
   },
   "prisma": {
     "schema": "src/infra/database/prisma/schema.prisma"
