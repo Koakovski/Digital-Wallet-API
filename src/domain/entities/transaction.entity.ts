@@ -1,9 +1,11 @@
 import { Entity } from '../base/entity';
+import { TransactionCancellationTransactionDataValueObject } from '../value-objects/transaction/transaction.cancelletion-transaction-data.value-object';
 
 export type TransactionEntityProps = {
   senderId: string;
   receiverId: string;
   valueInCents: number;
+  cancelleationTransactionData: TransactionCancellationTransactionDataValueObject | null;
   createdAt: Date;
 };
 
@@ -31,6 +33,10 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
     return this.props.valueInCents;
   }
 
+  get cancelleationTransactionData() {
+    return this.props.cancelleationTransactionData;
+  }
+
   get createdAt() {
     return this.props.createdAt;
   }
@@ -40,6 +46,7 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
       senderId: props.senderId,
       receiverId: props.receiverId,
       valueInCents: props.valueInCents,
+      cancelleationTransactionData: null,
       createdAt: new Date(),
     });
   }

@@ -31,10 +31,16 @@ model Transaction {
   receiverId   String @map("receiver_id") @db.Uuid
   valueInCents Int    @map("value_in_cents")
 
+  cancellationTransactionId String?   @unique @map("cancellation_transaction_id") @db.Uuid
+  cancelledAt               DateTime? @map("cancelled_at")
+
   createdAt DateTime @default(now()) @map("created_at")
 
   Sender   User @relation("sent_transactions", fields: [senderId], references: [id])
   Receiver User @relation("received_transactions", fields: [receiverId], references: [id])
+
+  CancellationTransaction Transaction? @relation("cancelled_transaction", fields: [cancellationTransactionId], references: [id])
+  CancelledTransaction    Transaction? @relation("cancelled_transaction")
 
   @@map("transactions")
 }
