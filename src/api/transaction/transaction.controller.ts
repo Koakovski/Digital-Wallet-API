@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -9,16 +9,21 @@ import { UserAuthGuard } from '../user/authorization/user-auth.guard';
 import { TransactionPresentableEntity } from './presenters/transaction.presentable-entity';
 import { AuthUser } from '../user/authorization/auth-user.decorator';
 import { AuthenticatedUserPayload } from 'src/domain/usecases/user/user.login.usecase';
-import { TransactionEntity } from 'src/domain/entities/transaction.entity';
 import { TransactionPresenter } from './presenters/transaction.presenter';
 import { TransactionCreateByTransferUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
 import { TransactionCreateByTransferDto } from './dtos/transaction.create-by-transfer.dto';
+import { PaginatedPresentableEntity } from '../_common/presenters/paginated/paginated.presentable-entity';
+import { TransactionFindPaginatedOfUserUseCase } from 'src/domain/usecases/transaction/transaction.find-paginated-of-user.usecase';
+import { PaginatedPresenter } from '../_common/presenters/paginated/paginated.presenter';
+import { TransactionFindAllPaginatedOfUserQueryDto } from './dtos/transaction.find-all-paginated-of-user.query.dto';
+import { PaginationRequest } from 'src/domain/base/paginated';
 
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
   constructor(
     private readonly transactionCreateByTransferUseCase: TransactionCreateByTransferUseCase,
+    private readonly transactionFindPaginatedOfUserUseCase: TransactionFindPaginatedOfUserUseCase,
   ) {}
 
   @Post('/transfer')
@@ -47,16 +52,27 @@ export class TransactionController {
   @UseGuards(UserAuthGuard)
   @ApiOperation({ description: 'Get all transactions of authorized User' })
   @ApiOkResponse({
-    type: TransactionPresentableEntity,
+    type: PaginatedPresentableEntity<TransactionPresentableEntity>,
     isArray: true,
   })
   @ApiBearerAuth()
-  async findAllTransactionsOfUser(
-    @AuthUser() _authUser: AuthenticatedUserPayload,
-  ): Promise<TransactionPresentableEntity[]> {
-    const transactions: TransactionEntity[] = [];
-    return transactions.map((transaction) =>
-      new TransactionPresenter(transaction).toPresent(),
+  async findPagintedTransactionsOfUser(
+    @AuthUser() authUser: AuthenticatedUserPayload,
+    @Query() query: TransactionFindAllPaginatedOfUserQueryDto,
+  ): Promise<PaginatedPresentableEntity<TransactionPresentableEntity>> {
+    const paginatedTransactions =
+      await this.transactionFindPaginatedOfUserUseCase.execute({
+        userId: authUser.id,
+        receiverIds: query.receiver_ids,
+        role: query.role,
+        paginationRequest: new PaginationRequest(
+          Number(query.page),
+          Number(query.per_page),
+        ),
+      });
+
+    return new PaginatedPresenter(paginatedTransactions).mapData(
+      (transaction) => new TransactionPresenter(transaction.root).toPresent(),
     );
   }
 }
