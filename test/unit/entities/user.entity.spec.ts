@@ -79,7 +79,7 @@ describe('UserEntity', () => {
 
       expect(() => sut.removeBalance(11)).toThrowBaseException(
         InsufficientBalanceException,
-        `User with id ${sut.id} do not have enough ance to complete the transaction`,
+        `User with id ${sut.id} do not have enough balance to complete the transaction`,
       );
     });
   });
