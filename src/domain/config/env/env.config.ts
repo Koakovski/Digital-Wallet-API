@@ -1,11 +1,7 @@
 import { z } from 'zod';
-import { Env } from './env/env.interface';
+import { Env } from './env.interface';
 
-export default () => {
-  return EnvConfig.load();
-};
-
-class EnvConfig {
+export class EnvConfig {
   static load(): Env {
     const parsedEnv = this.envSchema.safeParse(process.env);
 

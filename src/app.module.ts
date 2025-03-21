@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AppController } from './api/app.controller';
 import { HashModule } from './infra/services/hash/hash.module';
 import { UserControllerModule } from './api/user/user.controller.module';
@@ -8,10 +7,11 @@ import { TransactionControllerModule } from './api/transaction/transaction.contr
 import { UserAuthModule } from './api/user/authorization/user.auth.module';
 import { PermissionModule } from './infra/permissions/permission.module';
 import { DatabaseModule } from './infra/database/database.module';
-import envConfiguration from './infra/config/env.config';
+import { ConfigModule } from './infra/services/config/config.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     DatabaseModule,
     HashModule,
     EncryptModule,
@@ -19,10 +19,6 @@ import envConfiguration from './infra/config/env.config';
     PermissionModule,
     UserControllerModule,
     TransactionControllerModule,
-    ConfigModule.forRoot({
-      load: [envConfiguration],
-      isGlobal: true,
-    }),
   ],
   controllers: [AppController],
 })
