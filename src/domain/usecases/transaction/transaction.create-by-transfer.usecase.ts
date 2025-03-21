@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TransactionAggregate } from 'src/domain/aggregates/transaction.aggregate';
 import { UseCase } from 'src/domain/base/usecase';
+import { TransectionCannotTransferToSelfException } from 'src/domain/exceptions/transaction/transaction.cannot-transfer-to-self.exception';
 import { UserNotFoundException } from 'src/domain/exceptions/user/user.not-found.exception';
 import { TransactionAggregateRepository } from 'src/domain/repositories/transaction.aggregate.repository';
 import { UserRepository } from 'src/domain/repositories/user.repository';
@@ -20,6 +21,10 @@ export class TransactionCreateByTransferUseCase
   async execute(
     params: TransactionCreateByTransferUseCaseParams,
   ): Promise<TransactionAggregate> {
+    if (params.receiverId === params.senderId) {
+      throw new TransectionCannotTransferToSelfException();
+    }
+
     const [sender, receiver] = await Promise.all([
       this.fetchUser(params.senderId),
       this.fetchUser(params.receiverId),
