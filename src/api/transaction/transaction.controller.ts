@@ -27,6 +27,12 @@ import { PaginatedTransactionAggregatePresentableEntity } from './presenters/agg
 import { TransactionAggregatePresenter } from './presenters/aggregate/transaction.aggregate.presenter';
 import { TransactionAggregatePresentableEntity } from './presenters/aggregate/transaction.aggregate.presentable-entity';
 import { TransactionCreateByCancelUseCase } from 'src/domain/usecases/transaction/transaction.create-by-cancell.usecase';
+import { PermissionGuard } from 'src/infra/permissions/permission.guard';
+import { Permission } from 'src/infra/permissions/permission.decorator';
+import {
+  TransactionDataGetter,
+  TransactionDataGetterParams,
+} from '../../domain/permissions/data-getters/transaction.data-getter';
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
@@ -88,7 +94,13 @@ export class TransactionController {
   }
 
   @Patch('/cancel/:transactionId')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(UserAuthGuard, PermissionGuard)
+  @Permission<'transaction', TransactionDataGetterParams>({
+    resource: 'transaction',
+    action: 'update',
+    extractParams: (req) => ({ transactionId: req.params.transactionId }),
+    dataGetter: TransactionDataGetter,
+  })
   @ApiOperation({ description: 'Cancel a transaction by its ID' })
   @ApiOkResponse({
     type: TransactionAggregatePresentableEntity,
