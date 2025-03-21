@@ -1,4 +1,5 @@
 import { Entity } from '../base/entity';
+import { TransactionAlreadyCancelledException } from '../exceptions/transaction/transaction.already-cancelled.exception';
 import { TransactionCancellationDataValueObject } from '../value-objects/transaction/transaction.cancelletion-data.value-object';
 
 export type TransactionEntityProps = {
@@ -39,6 +40,16 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
 
   get createdAt() {
     return this.props.createdAt;
+  }
+
+  cancel(transactionId: string) {
+    if (this.props.cancelleationData) {
+      throw new TransactionAlreadyCancelledException();
+    }
+
+    this.props.cancelleationData = TransactionCancellationDataValueObject.new({
+      transactionId,
+    });
   }
 
   static new(props: TransactionEntityNewProps) {
