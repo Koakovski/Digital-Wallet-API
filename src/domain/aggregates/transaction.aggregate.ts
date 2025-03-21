@@ -61,7 +61,7 @@ export class TransactionAggregate {
     originalSender.addBalance(valueInCents);
 
     const cancellTransaction = TransactionEntity.new({
-      receiverId: originalReceiver.id,
+      receiverId: originalSender.id,
       senderId: originalReceiver.id,
       valueInCents,
     });
