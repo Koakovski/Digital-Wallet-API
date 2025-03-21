@@ -1,9 +1,13 @@
-export interface ExceptionMappedError {
+export interface ErrorDetail {
   code: string;
   message: string;
 }
 
-export interface ExceptionMapped extends ExceptionMappedError {
+export interface MappedError extends ErrorDetail {
+  validationErrors?: ErrorDetail[];
+}
+
+export interface MappedErrorResponse {
   status: number;
-  validation_errors?: ExceptionMappedError[];
+  error: MappedError;
 }

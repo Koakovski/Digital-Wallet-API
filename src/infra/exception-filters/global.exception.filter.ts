@@ -13,8 +13,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     const exceptionMapper = this.exceptionMapperFactory.create(exception);
-    const mappedException = exceptionMapper.map();
+    const { status, error } = exceptionMapper.map();
 
-    return response.status(mappedException.status).json(mappedException);
+    return response.status(status).json(error);
   }
 }
