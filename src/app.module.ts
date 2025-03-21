@@ -9,10 +9,12 @@ import { PermissionModule } from './infra/permissions/permission.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { ConfigModule } from './infra/services/config/config.module';
 import { GlobalExceptionFilterModule } from './infra/exception-filters/global-exception-filter.module';
+import { CaptureModule } from './infra/services/capture/capture.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    CaptureModule,
     DatabaseModule,
     HashModule,
     EncryptModule,
