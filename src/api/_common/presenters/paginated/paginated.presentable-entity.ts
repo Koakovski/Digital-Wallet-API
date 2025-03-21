@@ -1,3 +1,4 @@
+import { Type } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PaginatedPresentableEntity<T> {
@@ -26,4 +27,15 @@ export class PaginatedPresentableEntity<T> {
     description: 'Total number of pages',
   })
   total_pages: number;
+}
+
+export function PaginatedPresentabler<T>(
+  classRef: Type<T>,
+): Type<PaginatedPresentableEntity<T>> {
+  class PaginatedResponse extends PaginatedPresentableEntity<T> {
+    @ApiProperty({ type: () => [classRef], isArray: true })
+    declare data: T[];
+  }
+
+  return PaginatedResponse;
 }

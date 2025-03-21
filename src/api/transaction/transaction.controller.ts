@@ -12,11 +12,11 @@ import { AuthenticatedUserPayload } from 'src/domain/usecases/user/user.login.us
 import { TransactionPresenter } from './presenters/transaction.presenter';
 import { TransactionCreateByTransferUseCase } from 'src/domain/usecases/transaction/transaction.create.usecase';
 import { TransactionCreateByTransferDto } from './dtos/transaction.create-by-transfer.dto';
-import { PaginatedPresentableEntity } from '../_common/presenters/paginated/paginated.presentable-entity';
 import { TransactionFindPaginatedOfUserUseCase } from 'src/domain/usecases/transaction/transaction.find-paginated-of-user.usecase';
 import { PaginatedPresenter } from '../_common/presenters/paginated/paginated.presenter';
 import { TransactionFindAllPaginatedOfUserQueryDto } from './dtos/transaction.find-all-paginated-of-user.query.dto';
 import { PaginationRequest } from 'src/domain/base/paginated';
+import { PaginatedTransactionPresentableEntity } from './presenters/transaction.paginated.presentable-entity';
 
 @ApiTags('transaction')
 @Controller('/transactions')
@@ -52,14 +52,14 @@ export class TransactionController {
   @UseGuards(UserAuthGuard)
   @ApiOperation({ description: 'Get all transactions of authorized User' })
   @ApiOkResponse({
-    type: PaginatedPresentableEntity<TransactionPresentableEntity>,
+    type: PaginatedTransactionPresentableEntity,
     isArray: true,
   })
   @ApiBearerAuth()
   async findPagintedTransactionsOfUser(
     @AuthUser() authUser: AuthenticatedUserPayload,
     @Query() query: TransactionFindAllPaginatedOfUserQueryDto,
-  ): Promise<PaginatedPresentableEntity<TransactionPresentableEntity>> {
+  ): Promise<PaginatedTransactionPresentableEntity> {
     const paginatedTransactions =
       await this.transactionFindPaginatedOfUserUseCase.execute({
         userId: authUser.id,
