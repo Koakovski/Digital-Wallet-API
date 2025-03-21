@@ -19,11 +19,11 @@ export class TransactionPresenter {
   }
 
   private get presentableCancellationData(): TransactionCancellationDataPresentableEntity | null {
-    if (!this.transaction.cancelleationData) return null;
+    if (!this.transaction.cancellationData) return null;
 
     return {
-      transaction_id: this.transaction.cancelleationData.transactionId,
-      cancelled_at: this.transaction.cancelleationData.cancelledAt,
+      transaction_id: this.transaction.cancellationData.transactionId,
+      cancelled_at: this.transaction.cancellationData.cancelledAt,
     };
   }
 }

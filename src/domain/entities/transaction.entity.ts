@@ -6,7 +6,7 @@ export type TransactionEntityProps = {
   senderId: string;
   receiverId: string;
   valueInCents: number;
-  cancelleationData: TransactionCancellationDataValueObject | null;
+  cancellationData: TransactionCancellationDataValueObject | null;
   createdAt: Date;
 };
 
@@ -34,8 +34,8 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
     return this.props.valueInCents;
   }
 
-  get cancelleationData() {
-    return this.props.cancelleationData;
+  get cancellationData() {
+    return this.props.cancellationData;
   }
 
   get createdAt() {
@@ -43,11 +43,11 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
   }
 
   cancel(transactionId: string) {
-    if (this.props.cancelleationData) {
+    if (this.props.cancellationData) {
       throw new TransactionAlreadyCancelledException();
     }
 
-    this.props.cancelleationData = TransactionCancellationDataValueObject.new({
+    this.props.cancellationData = TransactionCancellationDataValueObject.new({
       transactionId,
     });
   }
@@ -57,7 +57,7 @@ export class TransactionEntity extends Entity<TransactionEntityProps> {
       senderId: props.senderId,
       receiverId: props.receiverId,
       valueInCents: props.valueInCents,
-      cancelleationData: null,
+      cancellationData: null,
       createdAt: new Date(),
     });
   }

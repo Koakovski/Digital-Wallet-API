@@ -5,14 +5,14 @@ import { TransactionCancellationDataValueObject } from 'src/domain/value-objects
 
 export class PrismaTransactionMapper {
   static toDomain(data: Transaction): TransactionEntity {
-    const cancelleationData = this.recoverCancellationData(data);
+    const cancellationData = this.recoverCancellationData(data);
 
     return TransactionEntity.recover(
       {
         senderId: data.senderId,
         receiverId: data.receiverId,
         valueInCents: data.valueInCents,
-        cancelleationData,
+        cancellationData,
         createdAt: data.createdAt,
       },
       data.id,
@@ -21,8 +21,8 @@ export class PrismaTransactionMapper {
 
   static toPersistence(data: TransactionEntity): Transaction {
     const cancellationTransactionId =
-      data.cancelleationData?.transactionId ?? null;
-    const cancelledAt = data.cancelleationData?.cancelledAt ?? null;
+      data.cancellationData?.transactionId ?? null;
+    const cancelledAt = data.cancellationData?.cancelledAt ?? null;
 
     return {
       id: data.id,
