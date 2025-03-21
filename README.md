@@ -23,3 +23,44 @@ A **Digital Wallet API** é uma solução para gerenciamento de saldo e transfer
 - [ ] **Adicionar mais testes unitários**
 - [ ] **Adicionar testes de integração**
 - [ ] **Simular ambiente no Docker**
+
+## Instalação
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/digital-wallet-api.git
+cd digital-wallet-api
+```
+
+### 2. Instalar dependências
+
+```bash
+npm install
+```
+
+### 3. Subir o banco de dados com Docker
+
+```bash
+docker-compose up -d
+```
+
+### 4. Aplicar as migrações
+
+```bash
+npm run migrate:apply
+
+```
+
+### 5. Rodar a API em modo de desenvolvimento
+
+```bash
+npm run dev
+```
+
+A API estará disponível em http://localhost:3000.
+
+### Testando a API
+
+- Certifique-se de ter seguido os passos de instalação corretamente.
+- Acesse a documentação da API em http://localhost:3000/api.
