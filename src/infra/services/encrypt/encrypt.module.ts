@@ -9,7 +9,7 @@ import { ConfigService } from 'src/domain/services/config.service';
   imports: [
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
-        secretOrPrivateKey: configService.get('JWT_SECRET'),
+        secret: configService.get('JWT_SECRET'),
       }),
       inject: [ConfigService],
     }),
