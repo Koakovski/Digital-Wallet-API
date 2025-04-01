@@ -33,6 +33,7 @@ import {
   TransactionDataGetter,
   TransactionDataGetterParams,
 } from '../../domain/permissions/data-getters/transaction.data-getter';
+import { QueryConverter } from 'src/domain/helpers/query-converter';
 @ApiTags('transaction')
 @Controller('/transactions')
 export class TransactionController {
@@ -82,8 +83,8 @@ export class TransactionController {
         receiverIds: query.receiver_ids,
         role: query.role,
         paginationRequest: new PaginationRequest(
-          Number(query.page),
-          Number(query.per_page),
+          QueryConverter.toNumberIfExists(query.page),
+          QueryConverter.toNumberIfExists(query.per_page),
         ),
       });
 
