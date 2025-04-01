@@ -33,7 +33,7 @@ export class PaginationRequest {
   }
 
   private set page(page: number) {
-    this.page = Math.min(page, 1);
+    this.page = Math.max(page, 1);
   }
 
   private set perPage(perPage: number) {
@@ -44,7 +44,7 @@ export class PaginationRequest {
   }
 
   constructor(page = 1, perPage = 10) {
-    this._page = page;
+    this.page = page;
     this.perPage = perPage;
   }
 }
