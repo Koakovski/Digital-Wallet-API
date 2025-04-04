@@ -4,7 +4,7 @@ import { ResourcePermissions } from 'src/domain/permissions/permission.resource'
 
 export const PERMISSIONS_METADATA_KEY = 'permissions_metadata';
 
-export interface PermissionDataGetter<Params, Data> {
+export interface PermissionDataFetcher<Params, Data> {
   get(params: Params): Promise<Data | null>;
 }
 
@@ -14,14 +14,17 @@ export type PermissionMetadata<
 > = {
   resource: Resource;
   action: ResourcePermissions[Resource]['actions'];
-  extractParams: (request: Request) => DataGetterParams;
-  dataGetter: new (
-    ...args: any[]
-  ) => PermissionDataGetter<
-    DataGetterParams,
-    ResourcePermissions[Resource]['dataType']
-  >;
+  dataFetcher?: {
+    extractParams: (request: Request) => DataGetterParams;
+    handler: new (
+      ...args: any[]
+    ) => PermissionDataFetcher<
+      DataGetterParams,
+      ResourcePermissions[Resource]['dataType']
+    >;
+  };
 };
+
 export const Permission = <
   Resource extends keyof ResourcePermissions,
   DataGetterParams = object,

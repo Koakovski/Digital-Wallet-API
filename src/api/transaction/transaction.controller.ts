@@ -30,9 +30,9 @@ import { TransactionCreateByCancelUseCase } from 'src/domain/usecases/transactio
 import { PermissionGuard } from 'src/infra/permissions/permission.guard';
 import { Permission } from 'src/infra/permissions/permission.decorator';
 import {
-  TransactionDataGetter,
-  TransactionDataGetterParams,
-} from '../../domain/permissions/data-getters/transaction.data-getter';
+  TransactionDataFetcher,
+  TransactionDataFetcherParams,
+} from '../../domain/permissions/data-fetchers/transaction.data-fetcher';
 import { QueryConverter } from 'src/domain/helpers/query-converter';
 @ApiTags('transaction')
 @Controller('/transactions')
@@ -96,11 +96,13 @@ export class TransactionController {
 
   @Patch('/cancel/:transactionId')
   @UseGuards(UserAuthGuard, PermissionGuard)
-  @Permission<'transaction', TransactionDataGetterParams>({
+  @Permission<'transaction', TransactionDataFetcherParams>({
     resource: 'transaction',
     action: 'update',
-    extractParams: (req) => ({ transactionId: req.params.transactionId }),
-    dataGetter: TransactionDataGetter,
+    dataFetcher: {
+      extractParams: (req) => ({ transactionId: req.params.transactionId }),
+      handler: TransactionDataFetcher,
+    },
   })
   @ApiOperation({ description: 'Cancel a transaction by its ID' })
   @ApiOkResponse({

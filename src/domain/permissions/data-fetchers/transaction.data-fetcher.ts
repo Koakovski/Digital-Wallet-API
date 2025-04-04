@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TransactionAggregate } from 'src/domain/aggregates/transaction.aggregate';
 import { TransactionAggregateRepository } from 'src/domain/repositories/transaction.aggregate.repository';
-import { PermissionDataGetter } from 'src/infra/permissions/permission.decorator';
+import { PermissionDataFetcher } from 'src/infra/permissions/permission.decorator';
 
 @Injectable()
-export class TransactionDataGetter
+export class TransactionDataFetcher
   implements
-    PermissionDataGetter<TransactionDataGetterParams, TransactionAggregate>
+    PermissionDataFetcher<TransactionDataFetcherParams, TransactionAggregate>
 {
   constructor(
     @Inject(TransactionAggregateRepository)
@@ -14,12 +14,12 @@ export class TransactionDataGetter
   ) {}
 
   async get(
-    params: TransactionDataGetterParams,
+    params: TransactionDataFetcherParams,
   ): Promise<TransactionAggregate | null> {
     return await this.transactionRepository.findById(params.transactionId);
   }
 }
 
-export type TransactionDataGetterParams = {
+export type TransactionDataFetcherParams = {
   transactionId: string;
 };

@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   Injectable,
   ForbiddenException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { Request } from 'express';
@@ -41,14 +40,20 @@ export class PermissionGuard<Resource extends keyof ResourcePermissions>
       return true;
     }
 
-    const { resource, action, extractParams, dataGetter } = metadata;
+    const { resource, action, dataFetcher } = metadata;
+    let data: ResourcePermissions[Resource]['dataType'] | undefined = undefined;
 
-    const params = extractParams(request);
-    const dataGetterInstance = await this.moduleRef.create(dataGetter);
-    const data = await dataGetterInstance.get(params);
+    if (dataFetcher) {
+      const params = dataFetcher.extractParams(request);
+      const dataFetcherHandlerInstance = await this.moduleRef.create(
+        dataFetcher.handler,
+      );
+      const gettedData = await dataFetcherHandlerInstance.get(params);
+      if (!gettedData) {
+        throw new ForbiddenException();
+      }
 
-    if (!data) {
-      throw new UnauthorizedException();
+      data = gettedData;
     }
 
     const hasPermission = checkinPermission(user, resource, action, data);
